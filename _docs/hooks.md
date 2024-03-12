@@ -13,7 +13,7 @@ You can change their location by setting `hooks_path` in the configuration file.
 
 If the script returns a non-zero exit code the command will be aborted.
 
-`KAMAL_*` environment variables are available to the hooks command for
+`KAMAL_*` environment variables are available to the hooks command (except for `pre-config`) for
 fine-grained audit reporting, e.g. for triggering deployment reports or
 firing a JSON webhook. These variables include:
 - `KAMAL_RECORDED_AT` - UTC timestamp in ISO 8601 format, e.g. `2023-04-14T17:07:31Z`
@@ -26,7 +26,11 @@ firing a JSON webhook. These variables include:
 - `KAMAL_DESTINATION` - optional: destination, e.g. "staging"
 - `KAMAL_ROLE` - optional: role targeted, e.g. "web"
 
-There are four hooks:
+There are five hooks:
+
+1. pre-config
+Called before config file is loaded. This can be used to set environment variables or other configuration later used in config file. It uses default 
+(`.kamal/hooks`) directory since it's loaded `hooks_path` is set in the config file. It also does not have `KAMAL_*` environment variables set.
 
 1. pre-connect
 Called before taking the deploy lock. For checks that need to run before connecting to remote hosts - e.g. DNS warming.
